@@ -1,87 +1,136 @@
-# Ratify 🏪⭐
+# ⭐ Ratify
 
-A full-stack store rating platform where users can discover and rate stores. Built as a coding challenge submission.
+> A full-stack store rating platform where users can discover and rate stores.
+
+![Tech Stack](https://img.shields.io/badge/Frontend-React.js-61DAFB?style=flat&logo=react)
+![Tech Stack](https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-339933?style=flat&logo=node.js)
+![Tech Stack](https://img.shields.io/badge/Database-MySQL-4479A1?style=flat&logo=mysql)
+![Tech Stack](https://img.shields.io/badge/Auth-JWT-000000?style=flat&logo=jsonwebtokens)
+
+---
+
+## 📋 Table of Contents
+
+- [About](#about)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Database Setup](#database-setup)
+- [Default Credentials](#default-credentials)
+- [API Endpoints](#api-endpoints)
+- [Form Validations](#form-validations)
+
+---
+
+## About
+
+**Ratify** is a multi-role web application built as a Full Stack Intern Coding Challenge submission. Users can browse registered stores and submit star ratings (1–5). The platform supports three distinct roles — System Administrator, Normal User, and Store Owner — each with role-specific dashboards and functionalities, all protected by JWT-based authentication.
+
+---
 
 ## Tech Stack
 
-- **Frontend:** React.js, Tailwind CSS
-- **Backend:** Node.js, Express.js
-- **Database:** MySQL
-- **Auth:** JWT (JSON Web Tokens)
+| Layer | Technology |
+|---|---|
+| Frontend | React.js, Tailwind CSS, React Router DOM |
+| Backend | Node.js, Express.js |
+| Database | MySQL |
+| Authentication | JWT + bcryptjs |
+| HTTP Client | Axios |
+
+---
 
 ## Features
 
-### System Administrator
-- Dashboard with total users, stores, and ratings
+### 🔐 System Administrator
+- Dashboard with total users, stores, and ratings count
 - Add and manage users (admin, normal user, store owner)
-- Add and manage stores
-- Filter and sort all listings
-- View detailed user profiles
+- Add and manage stores with owner assignment
+- Filter users and stores by name, email, address, role
+- Sort all table listings (ascending/descending)
+- View detailed user profiles (store rating shown for store owners)
 
-### Normal User
-- Register and login
-- Browse all stores
+### 👤 Normal User
+- Register via signup page
+- Browse all registered stores
 - Search stores by name and address
-- Submit and update ratings (1-5 stars)
-- Update password
+- Submit star ratings (1–5) for any store
+- Modify previously submitted ratings
+- Update account password
 
-### Store Owner
-- View store dashboard
-- See average store rating
-- View list of users who rated their store
-- Update password
+### 🏪 Store Owner
+- View store dashboard with average rating
+- See list of users who rated their store with rating values and dates
+- Update account password
+
+---
 
 ## Project Structure
 
-ratify/
-
+```
+Ratify/
 ├── backend/
-
-│   ├── config/         # Database connection
-
-│   ├── controllers/    # Business logic
-
-│   ├── middleware/     # JWT auth middleware
-
-│   ├── routes/         # API routes
-
-│   └── index.js        # Entry point
-
+│   ├── config/
+│   │   └── db.js                  # MySQL connection pool
+│   ├── controllers/
+│   │   ├── authController.js      # signup, login, update password
+│   │   ├── adminController.js     # dashboard, users & stores CRUD
+│   │   ├── userController.js      # store listing, submit/update ratings
+│   │   └── storeOwnerController.js# store owner dashboard
+│   ├── middleware/
+│   │   └── auth.js                # JWT verify + role guards
+│   ├── routes/
+│   │   ├── auth.js                # /api/auth/*
+│   │   ├── admin.js               # /api/admin/*
+│   │   ├── user.js                # /api/user/*
+│   │   └── storeOwner.js          # /api/store-owner/*
+│   ├── .env                       # environment variables (not in git)
+│   └── index.js                   # Express app entry point
 └── frontend/
+    └── src/
+        ├── context/
+        │   └── AuthContext.js     # global auth state (Context API)
+        ├── utils/
+        │   └── api.js             # axios instance with interceptor
+        ├── pages/
+        │   ├── Login.jsx
+        │   ├── Signup.jsx
+        │   ├── admin/
+        │   │   ├── Dashboard.jsx
+        │   │   ├── Users.jsx
+        │   │   └── Stores.jsx
+        │   ├── user/
+        │   │   └── Stores.jsx
+        │   └── storeOwner/
+        │       └── Dashboard.jsx
+        └── App.js                 # routes + protected route logic
+```
 
-└── src/
-
-├── context/    # Auth context
-
-├── pages/      # All pages
-
-│   ├── admin/
-
-│   ├── user/
-
-│   └── storeOwner/
-
-└── utils/      # API utility
+---
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js
-- MySQL
+- Node.js (v16+)
+- MySQL (v8.0)
 
-### 1. Clone the repository
+### 1. Clone the Repository
+
 ```bash
-git clone https://github.com/omkale07/-ratify.git
-cd ratify
+git clone https://github.com/omkale07/Ratify.git
+cd Ratify
 ```
 
 ### 2. Backend Setup
+
 ```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file in the `backend` folder:
+Create a `.env` file inside the `backend/` folder:
+
 ```env
 PORT=5000
 DB_HOST=localhost
@@ -91,8 +140,32 @@ DB_NAME=ratify_db
 JWT_SECRET=ratify_super_secret_key
 ```
 
-### 3. Database Setup
-Open MySQL and run:
+Start the backend server:
+
+```bash
+npm run dev
+```
+
+Backend runs at: `http://localhost:5000`
+
+### 3. Frontend Setup
+
+Open a new terminal:
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Frontend runs at: `http://localhost:3000`
+
+---
+
+## Database Setup
+
+Open MySQL and run the following:
+
 ```sql
 CREATE DATABASE ratify_db;
 USE ratify_db;
@@ -129,7 +202,7 @@ CREATE TABLE ratings (
   FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE
 );
 
--- Default admin user (password: Admin@123)
+-- Default system admin
 INSERT INTO users (name, email, password, address, role) VALUES (
   'System Administrator',
   'admin@ratify.com',
@@ -139,53 +212,74 @@ INSERT INTO users (name, email, password, address, role) VALUES (
 );
 ```
 
-### 4. Start Backend
-```bash
-npm run dev
-```
+---
 
-### 5. Frontend Setup
-```bash
-cd ../frontend
-npm install
-npm start
-```
-
-### 6. Access the App
-- Frontend: `http://localhost:3000`
-- Backend API: `http://localhost:5000`
-
-## Default Login Credentials
+## Default Credentials
 
 | Role | Email | Password |
 |---|---|---|
 | Admin | admin@ratify.com | password |
 
-## Form Validations
-- **Name:** 20-60 characters
-- **Address:** Max 400 characters
-- **Password:** 8-16 characters, must include uppercase and special character
-- **Email:** Standard email format
+> Admin can create Store Owner accounts from the Users management page. Normal users can self-register via the Signup page.
+
+---
 
 ## API Endpoints
 
 ### Auth
-- `POST /api/auth/login` — Login
-- `POST /api/auth/signup` — Register
-- `PUT /api/auth/update-password` — Update password
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/api/auth/signup` | None | Register normal user |
+| POST | `/api/auth/login` | None | Login (all roles) |
+| PUT | `/api/auth/update-password` | Token | Update password |
 
 ### Admin
-- `GET /api/admin/dashboard` — Get stats
-- `GET /api/admin/users` — List users
-- `POST /api/admin/users` — Add user
-- `GET /api/admin/users/:id` — User details
-- `GET /api/admin/stores` — List stores
-- `POST /api/admin/stores` — Add store
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| GET | `/api/admin/dashboard` | Admin | Get platform stats |
+| GET | `/api/admin/users` | Admin | List users with filters & sort |
+| POST | `/api/admin/users` | Admin | Add new user (any role) |
+| GET | `/api/admin/users/:id` | Admin | Get user details |
+| GET | `/api/admin/stores` | Admin | List stores with filters & sort |
+| POST | `/api/admin/stores` | Admin | Add new store |
 
 ### User
-- `GET /api/user/stores` — List stores with ratings
-- `POST /api/user/ratings` — Submit rating
-- `PUT /api/user/ratings` — Update rating
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| GET | `/api/user/stores` | Token | Get stores with ratings |
+| POST | `/api/user/ratings` | Token | Submit a rating |
+| PUT | `/api/user/ratings` | Token | Update a rating |
 
 ### Store Owner
-- `GET /api/store-owner/dashboard` — Store dashboard
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| GET | `/api/store-owner/dashboard` | Store Owner | Get store dashboard |
+
+---
+
+## Form Validations
+
+| Field | Rule |
+|---|---|
+| Name | Minimum 20 characters, Maximum 60 characters |
+| Address | Maximum 400 characters |
+| Password | 8–16 characters, must include at least one uppercase letter and one special character |
+| Email | Standard email format |
+| Rating | Integer between 1 and 5 |
+
+---
+
+## Screenshots
+
+| Page | Description |
+|---|---|
+| Login | Single login for all roles with role-based redirect |
+| Admin Dashboard | Stats cards — users, stores, ratings |
+| Admin Users | Filterable, sortable table with add/view modals |
+| Admin Stores | Filterable, sortable table with average ratings |
+| User Stores | Store cards with star rating UI |
+| Store Owner | Average rating + rater table |
+
+---
+
+Made by (https://github.com/omkale07)
