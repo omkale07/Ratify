@@ -2,11 +2,12 @@
 
 > A full-stack store rating platform where users can discover and rate stores.
 
-![Tech Stack](https://img.shields.io/badge/Frontend-React.js-61DAFB?style=flat&logo=react)
-![Tech Stack](https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-339933?style=flat&logo=node.js)
-![Tech Stack](https://img.shields.io/badge/Database-MySQL-4479A1?style=flat&logo=mysql)
-![Tech Stack](https://img.shields.io/badge/Auth-JWT-000000?style=flat&logo=jsonwebtokens)
-
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ---
 
 ## 📋 Table of Contents
