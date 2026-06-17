@@ -1,12 +1,15 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import API from '../utils/api';
-import toast from 'react-hot-toast';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import API from "../utils/api";
+import toast from "react-hot-toast";
 
 export default function Signup() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '', email: '', password: '', address: ''
+    name: "",
+    email: "",
+    password: "",
+    address: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -16,16 +19,18 @@ export default function Signup() {
 
   const validate = () => {
     if (formData.name.length < 20 || formData.name.length > 60) {
-      toast.error('Name must be between 20 and 60 characters.');
+      toast.error("Name must be between 20 and 60 characters.");
       return false;
     }
     if (formData.address.length > 400) {
-      toast.error('Address must be under 400 characters.');
+      toast.error("Address must be under 400 characters.");
       return false;
     }
     const passRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
     if (!passRegex.test(formData.password)) {
-      toast.error('Password: 8-16 chars, must include uppercase and special character.');
+      toast.error(
+        "Password: 8-16 chars, must include uppercase and special character.",
+      );
       return false;
     }
     return true;
@@ -36,11 +41,11 @@ export default function Signup() {
     if (!validate()) return;
     setLoading(true);
     try {
-      await API.post('/auth/signup', formData);
-      toast.success('Account created! Please login.');
-      navigate('/login');
+      await API.post("/auth/signup", formData);
+      toast.success("Account created! Please login.");
+      navigate("/login");
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Signup failed.');
+      toast.error(err.response?.data?.message || "Signup failed.");
     } finally {
       setLoading(false);
     }
@@ -57,7 +62,8 @@ export default function Signup() {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name <span className="text-gray-400 text-xs">(20-60 characters)</span>
+              Full Name{" "}
+              <span className="text-gray-400 text-xs">(20-60 characters)</span>
             </label>
             <input
               type="text"
@@ -87,7 +93,10 @@ export default function Signup() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Address <span className="text-gray-400 text-xs">(max 400 characters)</span>
+              Address{" "}
+              <span className="text-gray-400 text-xs">
+                (max 400 characters)
+              </span>
             </label>
             <textarea
               name="address"
@@ -102,7 +111,10 @@ export default function Signup() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password <span className="text-gray-400 text-xs">(8-16 chars, uppercase + special)</span>
+              Password{" "}
+              <span className="text-gray-400 text-xs">
+                (8-16 chars, uppercase + special)
+              </span>
             </label>
             <input
               type="password"
@@ -114,19 +126,28 @@ export default function Signup() {
               placeholder="••••••••"
             />
           </div>
-
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-50"
           >
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? "Creating account..." : "Create Account"}
           </button>
+
+          {loading && (
+            <p className="text-center text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg py-2 px-3 mt-2">
+              ⏳ Our server is on a free hosting tier and may take 30-50 seconds
+              to wake up. Thanks for your patience!
+            </p>
+          )}
         </form>
 
         <p className="text-center text-sm text-gray-500 mt-6">
-          Already have an account?{' '}
-          <Link to="/login" className="text-indigo-600 font-medium hover:underline">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-indigo-600 font-medium hover:underline"
+          >
             Sign in
           </Link>
         </p>

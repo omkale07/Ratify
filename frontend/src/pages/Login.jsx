@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import API from '../utils/api';
-import toast from 'react-hot-toast';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import API from "../utils/api";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -18,17 +18,17 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await API.post('/auth/login', formData);
+      const res = await API.post("/auth/login", formData);
       login(res.data.user, res.data.token);
-      toast.success('Login successful!');
+      toast.success("Login successful!");
 
       // Redirect based on role
       const role = res.data.user.role;
-      if (role === 'admin') navigate('/admin/dashboard');
-      else if (role === 'user') navigate('/stores');
-      else if (role === 'store_owner') navigate('/store-owner/dashboard');
+      if (role === "admin") navigate("/admin/dashboard");
+      else if (role === "user") navigate("/stores");
+      else if (role === "store_owner") navigate("/store-owner/dashboard");
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Login failed.');
+      toast.error(err.response?.data?.message || "Login failed.");
     } finally {
       setLoading(false);
     }
@@ -79,13 +79,23 @@ export default function Login() {
             disabled={loading}
             className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-50"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? "Signing in..." : "Sign In"}
           </button>
+
+          {loading && (
+            <p className="text-center text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg py-2 px-3 mt-2">
+              ⏳ Our server is on a free hosting tier and may take 30-50 seconds
+              to wake up. Thanks for your patience!
+            </p>
+          )}
         </form>
 
         <p className="text-center text-sm text-gray-500 mt-6">
-          Don't have an account?{' '}
-          <Link to="/signup" className="text-indigo-600 font-medium hover:underline">
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            className="text-indigo-600 font-medium hover:underline"
+          >
             Sign up
           </Link>
         </p>
