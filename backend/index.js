@@ -2,6 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const db = require('./config/db');
+const cors = require('cors');
+
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://ratify-five.vercel.app'  
+  ],
+  credentials: true
+}));
 
 dotenv.config();
 
